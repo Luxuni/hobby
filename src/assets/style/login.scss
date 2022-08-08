@@ -1,0 +1,16 @@
+.el-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
+
+  .el-form-item__content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+:root {
+  --animate-duration: 400ms;
+  --animate-delay: .9ms;
+}
