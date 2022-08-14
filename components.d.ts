@@ -7,7 +7,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Banner: typeof import('./src/components/Home/Banner/index.vue')['default']
+    ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCarousel: typeof import('element-plus/es')['ElCarousel']
+    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
@@ -21,7 +28,10 @@ declare module '@vue/runtime-core' {
     LeftNavigation: typeof import('./src/components/Home/LeftNavigation/index.vue')['default']
     MyImage: typeof import('./src/components/Home/public/MyImage/index.vue')['default']
     NavigationLink: typeof import('./src/components/Home/NavigationLink.vue')['default']
+    Player: typeof import('./src/components/Home/Player/index.vue')['default']
+    ProducenItem: typeof import('./src/components/Home/ProducenItem/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ShowItem: typeof import('./src/components/Home/public/ShowItem/index.vue')['default']
   }
 }

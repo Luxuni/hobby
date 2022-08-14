@@ -52,7 +52,7 @@ onMounted(() => {
             <div class="flex items-center">
               <span>Hello!</span>
               <span class="mx-3">{{ UserMessageStore.userMessage.nickname }}</span>
-              <el-image class="w-[9%]" src="../../src/assets/img/welcome.svg" loading="lazy" />
+              <MyImage class="w-[9%]" src="../../src/assets/img/welcome.svg" loading="lazy" />
             </div>
             <!-- dream set -->
             <div>
@@ -69,10 +69,10 @@ onMounted(() => {
             <!-- find music content -->
             <navigation-link v-for="item of UserMessageStore.userHomeNavigation.findMusic" :key="item.key" :content="item.content" :path="item.path">
               <template #headIcon>
-                <el-icon class="mx-3" v-if="item.key === 'home'"><el-image src="../../src/assets/img/home.svg" /></el-icon>
-                <el-icon class="mx-3" v-else-if="item.key === 'album'"><el-image src="../../src/assets/img/album.svg" /></el-icon>
-                <el-icon class="mx-3" v-else-if="item.key === 'singer'"><el-image src="../../src/assets/img/singer.svg" /></el-icon>
-                <el-icon class="mx-3" v-else-if="item.key === 'radio'"><el-image src="../../src/assets/img/radio.svg" /></el-icon>
+                <el-icon class="mx-3" v-if="item.key === 'home'"><MyImage src="../../src/assets/img/home.svg" /></el-icon>
+                <el-icon class="mx-3" v-else-if="item.key === 'album'"><MyImage src="../../src/assets/img/album.svg" /></el-icon>
+                <el-icon class="mx-3" v-else-if="item.key === 'singer'"><MyImage src="../../src/assets/img/singer.svg" /></el-icon>
+                <el-icon class="mx-3" v-else-if="item.key === 'radio'"><MyImage src="../../src/assets/img/radio.svg" /></el-icon>
               </template>
             </navigation-link>
           </div>
@@ -86,9 +86,9 @@ onMounted(() => {
             <!-- my music content -->
             <navigation-link v-for="item of UserMessageStore.userHomeNavigation.myMusic" :key="item.key" :content="item.content" :path="item.path">
               <template #headIcon>
-                <el-icon class="mx-3" v-if="item.key === 'local'"><el-image src="../../src/assets/img/local.svg" /></el-icon>
-                <el-icon class="mx-3" v-else-if="item.key === 'like'"><el-image src="../../src/assets/img/like.svg" /></el-icon>
-                <el-icon class="mx-3" v-else-if="item.key === 'create'"><el-image src="../../src/assets/img/create.svg" /></el-icon>
+                <el-icon class="mx-3" v-if="item.key === 'local'"><MyImage src="../../src/assets/img/local.svg" /></el-icon>
+                <el-icon class="mx-3" v-else-if="item.key === 'like'"><MyImage src="../../src/assets/img/like.svg" /></el-icon>
+                <el-icon class="mx-3" v-else-if="item.key === 'create'"><MyImage src="../../src/assets/img/create.svg" /></el-icon>
               </template>
             </navigation-link>
           </div>
@@ -97,8 +97,8 @@ onMounted(() => {
             <!-- other content -->
             <navigation-link v-for="item of UserMessageStore.userHomeNavigation.other" :key="item.key" :content="item.content" :path="item.path">
               <template #tailIcon>
-                <el-icon class="mx-3" v-if="item.key === 'recommend'"><el-image src="../../src/assets/img/recommend.svg" /></el-icon>
-                <el-icon class="mx-3" v-else-if="item.key === 'emotion'"><el-image src="../../src/assets/img/emotion.svg" /></el-icon>
+                <el-icon class="mx-3" v-if="item.key === 'recommend'"><MyImage src="../../src/assets/img/recommend.svg" /></el-icon>
+                <el-icon class="mx-3" v-else-if="item.key === 'emotion'"><MyImage src="../../src/assets/img/emotion.svg" /></el-icon>
               </template>
             </navigation-link>
           </div>

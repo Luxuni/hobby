@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {vLoading} from 'element-plus'
-import {Picture as IconPicture, ArrowRight} from '@element-plus/icons-vue'
+import {Picture as IconPicture} from '@element-plus/icons-vue'
 
 defineProps<{className?: string; src: string}>()
 </script>

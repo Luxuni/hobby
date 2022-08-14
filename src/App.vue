@@ -10,14 +10,14 @@ const UserMessageStore = useUserMessage()
 //如果UserMessageStore中isLogin为true，则跳转到首页
 UserMessageStore.$subscribe((mutatian, state) => {
   //如果用户已登录，则跳转到首页
-  if (state.isLogin) {
+  if (state.isLogin && state.loginLoading === false) {
     router.push({name: 'home'})
   }
 })
 onMounted(async () => {
   //获取登录状态
   await getLoginStatus().then((res) => {
-    UserMessageStore.getLoginStatus(res.data)
+    UserMessageStore.getLoginStatus(res)
   })
 })
 </script>

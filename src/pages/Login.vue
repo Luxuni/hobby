@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import {computed, onMounted, reactive, ref, toRaw} from 'vue'
-import {useRouter} from 'vue-router'
 import {ElMessage, FormInstance} from 'element-plus'
 import '@/assets/style/login.scss'
 import {useUserMessage} from '@/store/UserMessage'
 import {Sunny, Moon} from '@element-plus/icons-vue'
 import {useDark, useToggle} from '@vueuse/core'
 
-const router = useRouter()
 //获取UserMessageStore
 const UserMessageStore = useUserMessage()
-//如果UserMessageStore中isLogin为true，则跳转到首页
-UserMessageStore.$subscribe((mutatian, state) => {
-  if (state.isLogin && state.loginLoading === false) {
-    router.push({name: 'home'})
-  }
-})
 //拿到指示器的实例
 const indicator = ref<HTMLSpanElement>(undefined as unknown as HTMLSpanElement)
 //拿到切换登录界面按钮的实例
@@ -249,7 +241,7 @@ onMounted(async () => {
                         inline-prompt
                         :active-icon="Sunny"
                         :inactive-icon="Moon"
-                        style="--el-switch-on-color: #f5e8c7; --el-switch-off-color: #100720"
+                        style="--el-switch-on-color: #100720; --el-switch-off-color: #100720"
                       />
                     </div>
                     <div class="antialiased text-4xl font-bold flex items-center justify-between" v-else>
@@ -261,7 +253,7 @@ onMounted(async () => {
                         inline-prompt
                         :active-icon="Sunny"
                         :inactive-icon="Moon"
-                        style="--el-switch-on-color: #f5e8c7; --el-switch-off-color: #100720"
+                        style="--el-switch-on-color: #100720; --el-switch-off-color: #100720"
                       />
                     </div>
                   </transition>
