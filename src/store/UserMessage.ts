@@ -1,4 +1,5 @@
 import { loginByPhone } from '@/servies/api'
+import { API } from '@/servies/api/API'
 import { homeNavigation } from '@/servies/api/mock'
 import { AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'

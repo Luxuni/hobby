@@ -12,6 +12,8 @@ UserMessageStore.$subscribe((mutatian, state) => {
   //如果用户已登录，则跳转到首页
   if (state.isLogin && state.loginLoading === false) {
     router.push({name: 'home'})
+  } else {
+    router.push({name: 'login'})
   }
 })
 onMounted(async () => {

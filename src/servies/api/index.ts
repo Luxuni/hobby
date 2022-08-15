@@ -1,5 +1,6 @@
 import request from "@/servies/request";
 import { AxiosPromise } from "axios";
+import { API } from "./API";
 
 //手机号密码登陆接口
 export const loginByPhone = (params: { phone: string; password: string }): AxiosPromise<API.loginByPhoneTypes> => {
@@ -38,7 +39,7 @@ export const getSearchDefault = (): AxiosPromise<API.getSearchDefaultTypes> => {
 //获取热搜列表(简略)接口
 export const getHotSearch = (): AxiosPromise<API.getHotSearchTypes> => {
   return request({
-    url: 'api/search/hot',
+    url: 'api/search/hot/detail',
     method: 'get'
   })
 }
@@ -64,6 +65,33 @@ export const getPersonalized = (params: { limit: number, offset?: number }): Axi
 export const getTopArtists = (params: { limit: number, offset?: number }): AxiosPromise<API.getTopArtistsTypes> => {
   return request({
     url: 'api/top/artists',
+    method: 'get',
+    params: params
+  })
+}
+
+//获取歌曲详情接口
+export const getSongDetail = (params: { ids: number }): AxiosPromise<API.getSongDetailTypes> => {
+  return request({
+    url: 'api/song/detail',
+    method: 'get',
+    params: params
+  })
+}
+
+//根据歌曲id获取歌曲url接口
+export const getSongUrl = (params: { id: number }): AxiosPromise<API.getSongUrlTypes> => {
+  return request({
+    url: 'api/song/url',
+    method: 'get',
+    params: params
+  })
+}
+
+//获取歌单详情接口
+export const getPlaylistDetail = (params: { id: number }): AxiosPromise<API.getPlaylistDetailTypes> => {
+  return request({
+    url: 'api/playlist/detail',
     method: 'get',
     params: params
   })

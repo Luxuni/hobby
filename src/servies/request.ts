@@ -94,11 +94,18 @@ request.interceptors.response.use(config => {
   } else {
     if (config.data?.code === 200) {
       return config;
-    } else if (config.data?.data.code === 200) {
-      return config.data;
     } else {
-      handleCodeError(config.data.data || config.data);
-      return Promise.reject(config.data)
+      if (config.data.data) {
+        if (config.data?.data.code === 200) {
+          return config.data;
+        } else {
+          handleCodeError(config.data.data || config.data);
+          return Promise.reject(config.data)
+        }
+      } else {
+        handleCodeError(config.data.data || config.data);
+        return Promise.reject(config.data)
+      }
     }
   }
 }, (err: any) => {
