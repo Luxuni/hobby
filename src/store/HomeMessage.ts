@@ -1,4 +1,5 @@
-import { getBanner, getPersonalized, getTopArtists } from "@/servies/api";
+import { getBanner, getPersonalized, getTopArtists, getTopPlaylist } from "@/servies/api";
+import { API } from "@/servies/api/API";
 import { defineStore } from "pinia";
 type bannerType = {
   imageUrl: string;
@@ -12,7 +13,7 @@ type bannerType = {
   encodeId: string;
   scm: string;
 }[]
-type personalizedType = {
+export type personalizedType = {
   id: number;
   type: number;
   name: string;
@@ -23,7 +24,7 @@ type personalizedType = {
   playCount: number;
   trackCount: number;
   highQuality: boolean;
-}[]
+}
 type topArtistsType = {
   name: string;
   id: number;
@@ -55,49 +56,35 @@ export const HomeMessage = defineStore('HomeMessage', {
     return {
       banner: [] as bannerType,
       bannerLoading: false,
-      personalized: [] as personalizedType,
+      personalized: [] as personalizedType[] | API.playListTypes[],
       personalizedLoading: false,
       topArtists: [] as topArtistsType,
       topArtistsLoading: false,
     }
   },
-  getters: {
-    _banner: state => state.banner,
-    _bannerLoading: state => state.bannerLoading,
-    _personalized: state => state.personalized,
-    _personalizedLoading: state => state.personalizedLoading,
-    _topArtists: state => state.topArtists,
-    _topArtistsLoading: state => state.topArtistsLoading,
-  },
   actions: {
     async getBanner() {
       this.bannerLoading = true
-      await getBanner().then(res => {
-        this.banner = res.data.banners
-        this.bannerLoading = false
-      }).catch(error => {
-        this.bannerLoading = false
-      })
+      const res = await getBanner()
+      this.banner = res.data.banners
+      this.bannerLoading = false
     },
     async getPersonalized(limit: number, offset?: number) {
       this.personalizedLoading = true
-      await getPersonalized({ limit: limit, offset: offset }).then(res => {
-        console.log(res);
-        this.personalized = res.data.result
-        this.personalizedLoading = false
-      }).catch(error => {
-        this.personalizedLoading = false
-      })
+      const res = await getPersonalized({ limit: limit, offset: offset })
+      this.personalized = res.data.result
+      this.personalizedLoading = false
     },
     async getTopArtists(limit: number, offset?: number) {
       this.topArtistsLoading = true
-      await getTopArtists({ limit: limit, offset: offset }).then(res => {
-        console.log(res);
-        this.topArtists = res.data.artists
-        this.topArtistsLoading = false
-      }).catch(error => {
-        this.topArtistsLoading = false
-      })
+      const res = await getTopArtists({ limit: limit, offset: offset })
+      this.topArtists = res.data.artists
+      this.topArtistsLoading = false
+    },
+    async getTopPlaylist(cat?: string, limit?: number, before?: number) {
+      const res = await getTopPlaylist({ cat: cat, limit: limit, before: before })
+      this.personalized.length = 0;
+      (this.personalized as API.playListTypes[]).push(...res.data.playlists)
     }
   }
 })

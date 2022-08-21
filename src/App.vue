@@ -1,36 +1,25 @@
-<script setup lang="ts">
-import {onMounted} from 'vue'
-import {getLoginStatus} from '@/servies/api'
-import {useUserMessage} from '@/store/UserMessage'
-import {useRouter} from 'vue-router'
-
-const router = useRouter()
-//获取UserMessageStore
-const UserMessageStore = useUserMessage()
-//如果UserMessageStore中isLogin为true，则跳转到首页
-UserMessageStore.$subscribe((mutatian, state) => {
-  //如果用户已登录，则跳转到首页
-  if (state.isLogin && state.loginLoading === false) {
-    router.push({name: 'home'})
-  } else {
-    router.push({name: 'login'})
-  }
-})
-onMounted(async () => {
-  //获取登录状态
-  await getLoginStatus().then((res) => {
-    UserMessageStore.getLoginStatus(res)
-  })
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <router-view v-slot="{Component}">
-    <!-- 添加路由转场动画 -->
-    <transition name="fade" mode="out-in" enter-active-class="animate__animated animate__fadeIn" leave-active-class="animate__animated animate__fadeOut">
-      <component :is="Component" />
-    </transition>
-  </router-view>
+  <RouterView v-slot="{ Component }">
+    <div class="h-screen w-screen  bg-black">
+      <template v-if="Component">
+        <Transition name="fade" mode="out-in" enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut">
+          <Suspense>
+            <div class="h-full w-full overflow-hidden">
+              <component :is="Component"></component>
+            </div>
+            <template #fallback>
+              <div class="h-full w-full text-4xl flex items-center justify-center text-white">Loading...</div>
+            </template>
+          </Suspense>
+        </Transition>
+      </template>
+    </div>
+
+  </RouterView>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

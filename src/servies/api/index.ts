@@ -96,3 +96,37 @@ export const getPlaylistDetail = (params: { id: number }): AxiosPromise<API.getP
     params: params
   })
 }
+
+//获取精品歌单接口（首页底部歌单分类）
+export const getTopPlaylist = (params: { cat?: string, limit?: number, before?: number }): AxiosPromise<API.getTopPlaylistTypes> => {
+  return request({
+    url: 'api/top/playlist/highquality/tags',
+    method: 'get',
+    params: params
+  })
+}
+
+//获取每日推荐歌单接口（需要登陆）
+export const getDailyRecommendationList = (): AxiosPromise<API.getDailyRecommendationListTypes> => {
+  return request({
+    url: 'api/recommend/resource',
+    method: 'get'
+  })
+}
+
+//根据歌单id获取推荐歌单接口
+export const accordingCurrentPlaylistIdGetRecommendPlaylist = (params: { id: number|null }): AxiosPromise<API.AccordingCurrentPlaylistIdGetRecommendPlaylistTypes> => {
+  return request({
+    url: 'api/related/playlist',
+    method: 'get',
+    params: params
+  })
+}
+
+//退出登陆
+export const logout = () => {
+  return request({
+    url: 'api/logout',
+    method: 'get'
+  })
+}

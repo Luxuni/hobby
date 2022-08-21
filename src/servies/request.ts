@@ -82,6 +82,10 @@ const request = axios.create({
 request.interceptors.request.use(config => {
   //处理请求头
   config = handleToken(config);
+  config.params = {
+    ...config.params,
+    timestamp: new Date().getTime(),
+  }
   config.cancelToken = source.token;
   return config;
 }, (err: Error) => {

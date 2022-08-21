@@ -1,18 +1,18 @@
 const homeNavigation = {
   findMusic: [
-    { content: '首页', key: 'home', path: '/home' },
-    { content: '专辑', key: 'album', path: '/home/album' },
-    { content: '歌手', key: 'singer', path: '/home/singer' },
-    { content: '播客', key: 'radio', path: '/home/radio' },
+    { content: '首页', key: 'home', path: 'Banner' },
+    { content: '专辑', key: 'album', path: '' },//album
+    { content: '歌手', key: 'singer', path: '' },//singer
+    { content: '播客', key: 'radio', path: '' },//radio
   ],
   myMusic: [
-    { content: '本地与下载', key: 'local', path: 'home/local' },
-    { content: '我喜欢的音乐', key: 'like', path: 'home/like' },
-    { content: '创建歌单', key: 'create', path: 'home/create' },
+    { content: '本地与下载', key: 'local', path: '' },//local
+    { content: '我喜欢的音乐', key: 'like', path: '' },//like
+    { content: '创建歌单', key: 'create', path: '' },//create
   ],
   other: [
-    { content: '每日推荐', key: 'recommend', path: '/home/recommend' },
-    { content: '情绪助推器', key: 'emotion', path: '/home/emotion' },
+    { content: '每日推荐', key: 'recommend', path: 'dailyRecommendation' },
+    { content: '情绪助推器', key: 'emotion', path: '' },//emotion
   ]
 }
 

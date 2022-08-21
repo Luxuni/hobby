@@ -7,7 +7,8 @@ defineProps<{content: string; path: string}>()
   <div class="flex items-center">
     <slot name="headIcon" />
     <!-- content -->
-    <router-link :to="path">
+    <!-- // TODO -->
+    <router-link :to="{name:path}">
       <span>{{ content }}</span>
     </router-link>
     <slot name="tailIcon" />

@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref, toRaw} from 'vue'
-import {ElMessage, FormInstance} from 'element-plus'
+import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue'
+import { ElMessage, FormInstance } from 'element-plus'
 import '@/assets/style/login.scss'
-import {useUserMessage} from '@/store/UserMessage'
-import {Sunny, Moon} from '@element-plus/icons-vue'
-import {useDark, useToggle} from '@vueuse/core'
+import { useUserMessage } from '@/store/UserMessage'
+import { Sunny, Moon } from '@element-plus/icons-vue'
+import { useDark, useToggle } from '@vueuse/core'
+import { useRouter, useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
+const router = useRouter()
+const route = useRoute()
 //获取UserMessageStore
 const UserMessageStore = useUserMessage()
+const { loginLoading } = storeToRefs(UserMessageStore)
 //拿到指示器的实例
 const indicator = ref<HTMLSpanElement>(undefined as unknown as HTMLSpanElement)
 //拿到切换登录界面按钮的实例
@@ -59,8 +64,8 @@ const loginOrSign = ref(true)
 //使用计算属性来决定表单切换动画的方向
 const animationDirection = computed(() => {
   return loginOrSign.value
-    ? {enter: 'animate__animated animate__fadeInLeft', leave: 'animate__animated animate__fadeOutLeft'}
-    : {enter: 'animate__animated animate__fadeInRight', leave: 'animate__animated animate__fadeOutRight'}
+    ? { enter: 'animate__animated animate__fadeInLeft', leave: 'animate__animated animate__fadeOutLeft' }
+    : { enter: 'animate__animated animate__fadeInRight', leave: 'animate__animated animate__fadeOutRight' }
 })
 //获取登陆表单实例
 const loginFormRef = ref<FormInstance>()
@@ -105,11 +110,11 @@ const loginForm = reactive([
 ])
 //自定义表单验证规则
 const loginRules = reactive({
-  phoneNumber: [{validator: validatePhoneNumber, trigger: 'blur'}],
-  password: [{validator: validatePassword, trigger: 'blur'}],
-  signPhoneNumber: [{validator: validatePhoneNumber, trigger: 'blur'}],
-  signPassword: [{validator: validatePassword, trigger: 'blur'}],
-  verificationCode: [{validator: verificationCode, trigger: 'blur'}],
+  phoneNumber: [{ validator: validatePhoneNumber, trigger: 'blur' }],
+  password: [{ validator: validatePassword, trigger: 'blur' }],
+  signPhoneNumber: [{ validator: validatePhoneNumber, trigger: 'blur' }],
+  signPassword: [{ validator: validatePassword, trigger: 'blur' }],
+  verificationCode: [{ validator: verificationCode, trigger: 'blur' }],
 })
 //登陆表单提交方法
 const loginSubmitForm = async (formEl: FormInstance | undefined) => {
@@ -117,7 +122,8 @@ const loginSubmitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       //如果用户输入的登陆信息通过了rules验证，那么将用户输入的手机号和密码信息传输到UserMessage中进行请求
-      UserMessageStore.loginByPhone(toRaw(loginForm)[modelFlag.value].phoneNumber as string, toRaw(loginForm)[modelFlag.value].password as string)
+      await UserMessageStore.loginByPhone(toRaw(loginForm)[modelFlag.value].phoneNumber as string, toRaw(loginForm)[modelFlag.value].password as string)
+      router.push({ name: 'Banner' })
     } else {
       console.log('error submit!', fields)
     }
@@ -179,11 +185,11 @@ const goLoginNow = () => {
   }, 300)
 }
 //切换主题相关功能
-const switchThemes = ref(true) //切换主题开关
+const switchThemes = ref(route.meta.switchThemes) //切换主题开关
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 //登陆界面初始化时，拿到指示器的初始位置及宽度
-onMounted(async () => {
+onMounted(() => {
   indicator.value.style.left = `${loginIndicator.value?.offsetLeft}px`
   initialLeft = loginIndicator.value?.offsetLeft as number
   indicator.value.style.width = `${loginIndicator.value?.offsetWidth}px`
@@ -197,93 +203,61 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    class="h-screen w-screen bg-no-repeat bg-cover lg:min-w-[1470px] lg:relative dark:brightness-75"
-    style="background-image: url(../../src/assets/img/login.svg)"
-  >
+  <div class="h-screen w-screen bg-no-repeat bg-cover lg:min-w-[1470px] lg:relative dark:brightness-75"
+    style="background-image: url(../../src/assets/img/login.svg)">
     <div class="h-full w-full lg:backdrop-blur-md lg:flex lg:items-center lg:justify-center">
       <div class="h-full w-full lg:h-[915px] lg:min-h-[915px] lg:w-[1470px] lg:min-w-[1470px] lg:shadow-md lg:relative">
         <!-- background -->
         <div
           class="w-full h-full bg-no-repeat bg-cover lg:w-1/2 lg:bg-auto lg:absolute lg:left-0 lg:transition-all lg:duration-300 lg:ease-in-out dark:brightness-50"
-          :class="{'lg:ml-0': loginOrSign, 'lg:ml-[735px]': !loginOrSign, 'lg:rounded-r-md': !loginOrSign, 'lg:rounded-l-md': loginOrSign}"
-          style="background-image: url(../../src/assets/img/login.svg)"
-        ></div>
+          :class="{ 'lg:ml-0': loginOrSign, 'lg:ml-[735px]': !loginOrSign, 'lg:rounded-r-md': !loginOrSign, 'lg:rounded-l-md': loginOrSign }"
+          style="background-image: url(../../src/assets/img/login.svg)"></div>
         <!-- login_box -->
         <div
           class="lg:w-1/2 lg:h-full lg:flex lg:items-center justify-center lg:bg-white lg:opacity-80 lg:flex-shrink-0 lg:absolute lg:right-0 lg:transition-all lg:duration-300 lg:ease-in-out lg:dark:bg-[#495C83]"
-          :class="{'lg:mr-0': loginOrSign, 'lg:mr-[735px]': !loginOrSign, 'lg:rounded-r-md': loginOrSign, 'lg:rounded-l-md': !loginOrSign}"
-        >
+          :class="{ 'lg:mr-0': loginOrSign, 'lg:mr-[735px]': !loginOrSign, 'lg:rounded-r-md': loginOrSign, 'lg:rounded-l-md': !loginOrSign }">
           <div
-            class="px-8 w-[400px] h-[600px] fixed inset-0 m-auto rounded-lg backdrop-blur-md backdrop-brightness-90 backdrop-contrast-75 backdrop-opacity-90 lg:m-0 lg:static lg:backdrop-blur-none lg:backdrop-brightness-0 lg:backdrop-contrast-0 lg:backdrop-opacity-0 lg:shadow-md lg:dark:bg-[#7A86B6]"
-          >
+            class="px-8 w-[400px] h-[600px] fixed inset-0 m-auto rounded-lg backdrop-blur-md backdrop-brightness-90 backdrop-contrast-75 backdrop-opacity-90 lg:m-0 lg:static lg:backdrop-blur-none lg:backdrop-brightness-0 lg:backdrop-contrast-0 lg:backdrop-opacity-0 lg:shadow-md lg:dark:bg-[#7A86B6]">
             <!-- internal login box -->
             <div class="w-full h-full">
-              <el-form
-                ref="loginFormRef"
-                label-position="top"
-                label-width="100px"
-                :model="loginForm[modelFlag]"
-                style="width: 100%"
-                class="self-center"
-                :rules="loginRules"
-                status-icon
-              >
+              <el-form ref="loginFormRef" label-position="top" label-width="100px" :model="loginForm[modelFlag]"
+                style="width: 100%" class="self-center" :rules="loginRules" status-icon>
                 <el-form-item>
                   <!-- title -->
-                  <transition mode="out-in" :enter-active-class="animationDirection.enter" :leave-active-class="animationDirection.leave">
+                  <transition mode="out-in" :enter-active-class="animationDirection.enter"
+                    :leave-active-class="animationDirection.leave">
                     <div class="antialiased text-4xl font-bold flex items-center justify-between" v-if="loginOrSign">
                       <h1>登陆</h1>
                       <!-- 切换主题组件 -->
-                      <el-switch
-                        v-model="switchThemes"
-                        @change="toggleDark()"
-                        inline-prompt
-                        :active-icon="Sunny"
-                        :inactive-icon="Moon"
-                        style="--el-switch-on-color: #100720; --el-switch-off-color: #100720"
-                      />
+                      <el-switch v-model="switchThemes" @change="toggleDark()" inline-prompt :active-icon="Sunny"
+                        :inactive-icon="Moon" style="--el-switch-on-color: #100720; --el-switch-off-color: #100720" />
                     </div>
                     <div class="antialiased text-4xl font-bold flex items-center justify-between" v-else>
                       <h1>注册</h1>
                       <!-- 切换主题组件 -->
-                      <el-switch
-                        v-model="switchThemes"
-                        @change="toggleDark()"
-                        inline-prompt
-                        :active-icon="Sunny"
-                        :inactive-icon="Moon"
-                        style="--el-switch-on-color: #100720; --el-switch-off-color: #100720"
-                      />
+                      <el-switch v-model="switchThemes" @change="toggleDark()" inline-prompt :active-icon="Sunny"
+                        :inactive-icon="Moon" style="--el-switch-on-color: #100720; --el-switch-off-color: #100720" />
                     </div>
                   </transition>
                 </el-form-item>
                 <el-form-item>
                   <!-- Options -->
-                  <div class="w-full h-full flex flex-row flex-nowrap flex-none justify-between text-lg font-normal relative pb-[4px]">
+                  <div
+                    class="w-full h-full flex flex-row flex-nowrap flex-none justify-between text-lg font-normal relative pb-[4px]">
                     <!-- 滑动菜单指示器 -->
-                    <span
-                      id="indicator"
+                    <span id="indicator"
                       class="absolute h-[4px] inline-block bottom-0 bg-[#4EC8D5] rounded-[4px] transition-all duration-300 ease-in-out"
-                      ref="indicator"
-                    ></span>
-                    <span
-                      class="w-1/3 text-center cursor-pointer transition-all duration-300 ease-in-out"
-                      :class="{'text-gray-400': !indicatorColor}"
-                      ref="loginIndicator"
-                      @click="clickLoginInterface"
-                      >手机号登陆</span
-                    >
-                    <span
-                      class="w-1/3 text-center cursor-pointer transition-all duration-300 ease-in-out"
-                      :class="{'text-gray-400': indicatorColor}"
-                      ref="signIndicator"
-                      @click="clickLoginInterface"
-                      >手机号注册</span
-                    >
+                      ref="indicator"></span>
+                    <span class="w-1/3 text-center cursor-pointer transition-all duration-300 ease-in-out"
+                      :class="{ 'text-gray-400': !indicatorColor }" ref="loginIndicator"
+                      @click="clickLoginInterface">手机号登陆</span>
+                    <span class="w-1/3 text-center cursor-pointer transition-all duration-300 ease-in-out"
+                      :class="{ 'text-gray-400': indicatorColor }" ref="signIndicator"
+                      @click="clickLoginInterface">手机号注册</span>
                   </div>
                 </el-form-item>
-                <transition mode="out-in" :enter-active-class="animationDirection.enter" :leave-active-class="animationDirection.leave">
+                <transition mode="out-in" :enter-active-class="animationDirection.enter"
+                  :leave-active-class="animationDirection.leave">
                   <div v-if="loginOrSign" class="h-2/3 flex flex-col justify-between">
                     <!-- 登陆时应该显示的input -->
                     <el-form-item label="手机号" size="large" prop="phoneNumber" key="loginPhoneNumber">
@@ -293,7 +267,8 @@ onMounted(async () => {
                       <el-input v-model="loginForm[modelFlag].password" type="password" />
                     </el-form-item>
                     <el-form-item size="large" key="loginBtn">
-                      <el-button @click="loginSubmitForm(loginFormRef)" type="primary" :loading="UserMessageStore._loginLoading">登陆</el-button>
+                      <el-button @click="loginSubmitForm(loginFormRef)" type="primary" :loading="loginLoading">登陆
+                      </el-button>
                     </el-form-item>
                     <el-form-item key="loginText">
                       <span class="text-blue-400 text-right cursor-pointer">忘记密码?</span>
@@ -310,9 +285,10 @@ onMounted(async () => {
                     <el-form-item label="验证码" size="large" prop="verificationCode" key="signVerificationCode">
                       <div class="flex">
                         <el-input v-model="loginForm[modelFlag].verificationCode" />
-                        <el-button type="primary" plain @click="getVerificationCode" :disabled="isItPossibleToGetTheVerificationCode">{{
-                          getVerificationCodeText
-                        }}</el-button>
+                        <el-button type="primary" plain @click="getVerificationCode"
+                          :disabled="isItPossibleToGetTheVerificationCode">{{
+                              getVerificationCodeText
+                          }}</el-button>
                       </div>
                     </el-form-item>
                     <el-form-item size="large" key="signBtn">
@@ -335,4 +311,5 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>

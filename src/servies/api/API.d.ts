@@ -1,6 +1,4 @@
-import { NumericDictionary } from lodash;
-
-declare namespace API {
+export declare namespace API {
   //获取用户的登录状态返回值类型
   type getLoginStatusTypes = {
     code: number;
@@ -398,5 +396,73 @@ declare namespace API {
     code: number;
     relatedVideos: null;
     playlist: playListTypes
+  }
+  //获取精品歌单接口返回值类型
+  type getTopPlaylistTypes = {
+    code: number;
+    more: boolean;
+    lasttime: number;
+    total: number;
+    playlists: playListTypes[]
+  }
+  //获取每日推荐歌单接口返回类型
+  type recommend = {
+    id: number;
+    type: number;
+    name: string;
+    copywriter: string;
+    picUrl: string;
+    playcount: number;
+    createTime: number;
+    creator: {
+      remarkName: null;
+      mutual: boolean;
+      detailDescription: string;
+      defaultAvatar: boolean;
+      expertTags: null;
+      djStatus: number;
+      followed: boolean;
+      backgroundUrl: string;
+      avatarImgIdStr: string;
+      avatarImgId: number;
+      backgroundImgId: number;
+      backgroundImgIdStr: string;
+      userId: number;
+      accountStatus: number;
+      vipType: number;
+      province: number;
+      avatarUrl: string;
+      authStatus: number;
+      userType: number;
+      nickname: string;
+      gender: number;
+      birthday: number;
+      city: number;
+      description: string;
+      signature: string;
+      authority: number;
+    };
+    trackCount: number;
+    userId: number;
+    alg: string;
+  }[]
+  type getDailyRecommendationListTypes = {
+    code: number;
+    featureFirst: boolean;
+    haveRcmdSongs: boolean;
+    recommend: recommend;
+  }
+  //根据歌单id获取推荐歌单返回值类型
+  type AccordingCurrentPlaylistIdGetRecommendPlaylistTypes = {
+    code: number;
+    playlists: {
+      creator: {
+        userId: number;
+        nickname: string;
+      }
+      coverImgUrl: string;
+      name: string;
+      id: string;
+    }[]
   }
 }
