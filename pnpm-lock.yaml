@@ -9,10 +9,12 @@ specifiers:
   animate.css: ^4.1.1
   autoprefixer: ^10.4.8
   axios: ^0.27.2
+  el-table-infinite-scroll: ^3.0.1
   element-plus: ^2.2.12
   gsap: ^3.10.4
   lodash: ^4.17.21
   mockjs: ^1.1.0
+  moment: ^2.29.4
   pinia: ^2.0.17
   postcss: ^8.4.14
   sass: ^1.54.3
@@ -33,10 +35,12 @@ dependencies:
   '@vueuse/core': 9.1.0_vue@3.2.37
   animate.css: 4.1.1
   axios: 0.27.2
+  el-table-infinite-scroll: 3.0.1
   element-plus: 2.2.12_vue@3.2.37
   gsap: 3.10.4
   lodash: 4.17.21
   mockjs: 1.1.0
+  moment: 2.29.4
   pinia: 2.0.17_j6bzmzd4ujpabbp5objtwxyjp4
   vite-plugin-mock: 2.9.6_mockjs@1.1.0+vite@3.0.4
   vue: 3.2.37
@@ -562,6 +566,11 @@ packages:
       - supports-color
     dev: false
 
+  /core-js/3.24.1:
+    resolution: {integrity: sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==}
+    requiresBuild: true
+    dev: false
+
   /cssesc/3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
@@ -631,6 +640,16 @@ packages:
 
   /ee-first/1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
+    dev: false
+
+  /el-table-infinite-scroll/3.0.1:
+    resolution: {integrity: sha512-A5zeqo0us1mzAi+bvQsluex2V4BSEf/2a4FuZzkluJWsoqNCIexRVnxcgWVRl/8HaAK9nLGLnkAb//Xox+eLOg==}
+    dependencies:
+      core-js: 3.24.1
+      element-plus: 2.2.12_vue@3.2.37
+      vue: 3.2.37
+    transitivePeerDependencies:
+      - '@vue/composition-api'
     dev: false
 
   /electron-to-chromium/1.4.211:
@@ -1115,6 +1134,10 @@ packages:
     hasBin: true
     dependencies:
       commander: 9.4.0
+    dev: false
+
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
     dev: false
 
   /ms/2.0.0:

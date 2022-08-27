@@ -1,53 +1,57 @@
-import { createApp } from 'vue';
+import { createApp } from 'vue'
 import './assets/style/index.css'
 import App from './App.vue'
 import router from './router'
-import "animate.css"
+import 'animate.css'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import { createPinia } from 'pinia'
+import _ from 'lodash'
 const pinia = createPinia()
 const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.mount('#app')
 
-//自定义指令监听元素宽高是否发生改变
+//自定义指令监听元素宽高发生改变时调用
 app.directive('resize', {
   mounted(el, binding) {
-    let width = '', height = '';
+    let width = '',
+      height = ''
     function isReize() {
       if (document.defaultView) {
-        const style = document.defaultView.getComputedStyle(el);
+        const style = document.defaultView.getComputedStyle(el)
         if (width !== style.width || height !== style.height) {
-          binding.value();  // 关键
+          binding.value() // 关键
         }
-        width = style.width;
-        height = style.height;
+        width = style.width
+        height = style.height
       }
     }
-    el.__vueSetInterval__ = setInterval(isReize, 300);
+    el.__vueSetInterval__ = setInterval(isReize, 300)
   },
   unmounted(el) {
-    clearInterval(el.__vueSetInterval__);
-  }
+    clearInterval(el.__vueSetInterval__)
+  },
 })
+//监听元素相较于屏幕位置发生改变时调用
 app.directive('location', {
   mounted(el, binding) {
-    let x = 0, y = 0;
+    let x = 0,
+      y = 0
     function isLocation() {
       if (el.getBoundingClientRect()) {
-        const { x: ex, y: ey } = el.getBoundingClientRect();
+        const { x: ex, y: ey } = el.getBoundingClientRect()
         if (x !== ex || y !== ey) {
-          binding.value();  // 关键
+          binding.value() // 关键
         }
-        x = ex;
-        y = ey;
+        x = ex
+        y = ey
       }
     }
-    el.__vueSetInterval__ = setInterval(isLocation, 300);
+    el.__vueSetInterval__ = setInterval(isLocation, 300)
   },
   unmounted(el) {
-    clearInterval(el.__vueSetInterval__);
-  }
+    clearInterval(el.__vueSetInterval__)
+  },
 })

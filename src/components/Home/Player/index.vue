@@ -9,20 +9,6 @@ import { AnimationMessage } from '@/store/AnimationMessage'
 import _ from 'lodash'
 import { useRouter } from 'vue-router'
 
-type ar = {
-  id: number
-  name: string
-  tns: []
-  alias: []
-}[]
-type al = {
-  id: number
-  name: string
-  picUrl: string
-  tns: []
-  pic_str: string
-  pic: number
-}
 //格式化时间方法
 const formatSeconds = (value: number) => {
   let theTime = Math.round(value) // 秒
@@ -40,12 +26,10 @@ const formatSeconds = (value: number) => {
     return `0:${theTime}`
   }
 }
-
 const router = useRouter()
 const MusicPlayerStore = MusicPlayer()
-const { playlist, playListMessageLoading } = storeToRefs(MusicPlayerStore)
+const { playlist, playerFlag } = storeToRefs(MusicPlayerStore)
 //当前播放歌曲指针
-const playerFlag = ref(0)
 //播放器进度条绑定值
 const songProgress = ref(0)
 //播放器是否播放状态
@@ -157,7 +141,7 @@ const goCurrentlyPlayingMusicList = () => {
     <!-- image -->
     <div ref="songCover" v-location="locationChange" class="w-[95%] aspect-square rounded-3xl cursor-pointer"
       @click="goCurrentlyPlayingMusicList">
-      <MyImage v-if="playlist.length > 0" :src="playlist[playerFlag].al ? (playlist[playerFlag].al as al).picUrl : ''"
+      <MyImage v-if="playlist.length > 0" :src="playlist[playerFlag].al ? (playlist[playerFlag].al).picUrl : ''"
         className="h-full w-full rounded-3xl" />
       <div v-else class="w-full h-full">
         <h1 class="w-full h-full border border-gray-400 border-solid rounded-3xl flex items-center justify-center">
@@ -168,15 +152,15 @@ const goCurrentlyPlayingMusicList = () => {
     <div class="w-[95%] h-[10%] flex flex-col justify-between">
       <!-- name -->
       <div class="w-full flex justify-center">
-        <div v-if="playlist.length > 0 && playListMessageLoading === false" class="text-xl">{{ playlist[playerFlag].name
+        <div v-if="playlist.length > 0" class="text-xl">{{ playlist[playerFlag].name
             ?? ''
         }}</div>
         <div v-else class="text-xl">还没有歌曲哦QAQ</div>
       </div>
       <!-- author -->
       <div class="w-full flex justify-center">
-        <div v-if="playlist.length > 0 && playListMessageLoading === false" class="text-gray-400">
-          {{ playlist[playerFlag].ar ? (playlist[playerFlag].ar as ar).map((item) => item.name).join('/') : '' }}
+        <div v-if="playlist.length > 0" class="text-gray-400">
+          {{ playlist[playerFlag].ar ? (playlist[playerFlag].ar).map((item) => item.name).join('/') : '' }}
         </div>
         <div v-else class="text-gray-400">未知作者TAT</div>
       </div>

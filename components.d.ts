@@ -7,8 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Album: typeof import('./src/components/Album.vue')['default']
     Banner: typeof import('./src/components/Home/Banner/index.vue')['default']
+    CommentItem: typeof import('./src/components/Home/public/CommentItem/index.vue')['default']
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
@@ -21,13 +21,14 @@ declare module '@vue/runtime-core' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElSkele: typeof import('element-plus/es')['ElSkele']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
     ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     ElSkeletonItem: typeof import('element-plus/es')['ElSkeletonItem']
     ElSlider: typeof import('element-plus/es')['ElSlider']
-    ElSpace: typeof import('element-plus/es')['ElSpace']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTag: typeof import('element-plus/es')['ElTag']
     LeftNavigation: typeof import('./src/components/Home/LeftNavigation/index.vue')['default']
     MyImage: typeof import('./src/components/Home/public/MyImage/index.vue')['default']
     NavigationLink: typeof import('./src/components/Home/NavigationLink.vue')['default']
@@ -36,7 +37,5 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ShowItem: typeof import('./src/components/Home/public/ShowItem/index.vue')['default']
-    Son: typeof import('./src/components/son.vue')['default']
-    Test: typeof import('./src/components/Home/Player/test.vue')['default']
   }
 }

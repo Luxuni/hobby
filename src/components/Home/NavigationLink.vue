@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{content: string; path: string}>()
+defineProps<{ content: string; path: string; params?: {} }>()
 </script>
 
 <template>
@@ -8,11 +8,12 @@ defineProps<{content: string; path: string}>()
     <slot name="headIcon" />
     <!-- content -->
     <!-- // TODO -->
-    <router-link :to="{name:path}">
+    <router-link :to="{ name: path, params: params }">
       <span>{{ content }}</span>
     </router-link>
     <slot name="tailIcon" />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

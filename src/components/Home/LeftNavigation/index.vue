@@ -2,6 +2,7 @@
 import '@/components/Home/LeftNavigation/LeftNavigation.scss'
 import { useUserMessage } from '@/store/UserMessage'
 import { ArrowRight } from '@element-plus/icons-vue'
+import { template } from 'lodash';
 import { storeToRefs } from 'pinia';
 
 //获取UserMessageStore

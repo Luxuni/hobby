@@ -7,6 +7,7 @@ import { AnimationMessage } from '@/store/AnimationMessage'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 
 const MusicPlayerStore = MusicPlayer()
 const props = defineProps<{ src: string; name: string; id: number; loading: boolean }>()
@@ -39,6 +40,13 @@ const changeIntroduce = () => {
     introduce.value.style.width = `${image.value.offsetWidth}px`
   }
 }
+//点击查看详情按钮进入此歌单详情页面
+const router = useRouter()
+
+const enterPlaylistDetails = () => {
+  console.log('查看详情', props.id)
+  router.push({ name: 'PlaylistDetails', params: { id: props.id } })
+}
 </script>
 
 <template>
@@ -53,7 +61,13 @@ const changeIntroduce = () => {
         <el-skeleton-item variant="text" style="width: 80%"></el-skeleton-item>
       </template>
       <template #default>
-        <div v-resize="changeIntroduce" ref="image" class="h-[80%] aspect-square overflow-hidden rounded-3xl">
+        <!-- TODO 增加遮罩层，上半部点击进入歌单详情，下半部点击直接将歌单纳入播放列表 -->
+        <div v-resize="changeIntroduce" ref="image"
+          class="mask_p h-[80%] aspect-square overflow-hidden rounded-3xl relative">
+          <!-- 上半部遮罩，点击进入歌单详情 -->
+          <div class="mask w-full h-[50%] absolute bg-black opacity-75 z-10 flex items-center justify-center">
+            <el-button @click.stop="enterPlaylistDetails">查看详情</el-button>
+          </div>
           <MyImage :src="src" className="h-full w-full rounded-3xl hover:scale-150 transition-all duration-500" />
         </div>
         <!-- introduce -->
@@ -64,5 +78,17 @@ const changeIntroduce = () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.mask_p {
+  .mask {
+    top: -100%;
+    transition: all .3s ease;
+  }
+
+  &:hover {
+    .mask {
+      top: 0;
+    }
+  }
+}
 </style>

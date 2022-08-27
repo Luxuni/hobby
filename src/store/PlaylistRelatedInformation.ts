@@ -1,3 +1,4 @@
+//和MusicPlayer.ts配合使用，主要用来拉取根据用户播放列表的推荐歌单
 import { accordingCurrentPlaylistIdGetRecommendPlaylist } from "@/servies/api";
 import { MusicPlayer } from "./MusicPlayer";
 import { defineStore, storeToRefs } from "pinia";
@@ -19,7 +20,7 @@ export const PlaylistRelatedInformation = defineStore('PlaylistRelatedInformatio
     }
   },
   getters: {
-   
+
   },
   actions: {
     async FuncCcordingCurrentPlaylistIdGetRecommendPlaylist(id?: number | null) {
@@ -27,7 +28,6 @@ export const PlaylistRelatedInformation = defineStore('PlaylistRelatedInformatio
       const { currentPlaylistId } = storeToRefs(MusicPlayerStore)
       this.accordingCurrentPlaylistIdGetRecommendPlaylistMessagesLoading = true
       const res = await accordingCurrentPlaylistIdGetRecommendPlaylist({ id: id ?? currentPlaylistId.value })
-      console.log(res)
       this.accordingCurrentPlaylistIdGetRecommendPlaylistMessages = res.data.playlists
       this.accordingCurrentPlaylistIdGetRecommendPlaylistMessagesLoading = false
     }

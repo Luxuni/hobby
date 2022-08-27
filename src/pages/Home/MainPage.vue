@@ -2,6 +2,7 @@
 import { HomeMessage } from '@/store/HomeMessage'
 import { storeToRefs } from 'pinia'
 import gsap from 'gsap'
+import LeftNavigation from '@/components/Home/LeftNavigation/index.vue'
 
 const HomeMessageStore = HomeMessage()
 const { topArtists, topArtistsLoading } = storeToRefs(HomeMessageStore)
@@ -21,9 +22,15 @@ const rightEnter = (el: any, done: gsap.Callback) => {
   <div class="w-full h-full flex items-center justify-center">
     <!-- 内层容器 -->
     <div class="h-[95%] w-[95%] flex">
+      <!-- left -->
       <Transition name="left_navigation" mode="out-in" @enter="leftNavigationEnter" appear :css="false">
-        <div v-show="true" class="h-full w-1/5 rounded-[3rem] bg-[#252D3A]">
-          <LeftNavigation />
+        <div v-show="true" class="h-full w-1/5 rounded-[3rem] bg-[#252D3A] flex">
+          <RouterView name="leftNavigation" v-slot="{ Component }">
+            <Transition name="fade" mode="out-in" enter-active-class="animate__animated animate__fadeInLeft"
+              leave-active-class="animate__animated animate__fadeOutLeft">
+              <component :is="Component ?? LeftNavigation"></component>
+            </Transition>
+          </RouterView>
         </div>
       </Transition>
       <!-- middle content -->

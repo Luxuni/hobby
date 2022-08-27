@@ -2,7 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.el-pagination {
+  justify-content: end;
+}
+
 :root {
   --animate-duration: 300ms;
   --animate-delay: 0.2s;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b8b8b842;
+  border-radius: 9999px;
 }

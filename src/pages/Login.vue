@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue'
+import { computed, onMounted, reactive, ref, toRaw } from 'vue'
 import { ElMessage, FormInstance } from 'element-plus'
 import '@/assets/style/login.scss'
 import { useUserMessage } from '@/store/UserMessage'

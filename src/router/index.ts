@@ -1,7 +1,6 @@
-import { getLoginStatus } from '@/servies/api';
-import { useUserMessage } from '@/store/UserMessage';
-import { AnimationMessage } from '@/store/AnimationMessage';
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { getLoginStatus } from '@/servies/api'
+import { useUserMessage } from '@/store/UserMessage'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
@@ -23,15 +22,44 @@ const routes = [
         component: () => import('@/pages/Home/Middle/MainCenter/MainCenter.vue'),
         children: [
           { path: '', name: 'Banner', component: () => import('@/components/Home/Banner/index.vue') },
-          { path: 'daily_recommendation', name: 'dailyRecommendation', component: () => import('@/pages/Home/Middle/MainCenter/DailyRecommendation.vue') },
+          {
+            path: 'daily_recommendation',
+            name: 'dailyRecommendation',
+            component: () => import('@/pages/Home/Middle/MainCenter/DailyRecommendation.vue'),
+          },
         ],
       },
+      //当前播放列表
       {
         path: 'currently_playing_list',
         name: 'CurrentlyPlayingList',
-        component: () => import('@/pages/Home/Middle/CurrentlyPlayingMusicList.vue')
+        component: () => import('@/pages/Home/Middle/CurrentlyPlayingMusicList.vue'),
       },
-    ]
+      {
+        path: 'playlist_details/:id',
+        name: 'PlaylistDetails',
+        component: () => import('@/pages/Home/Middle/PlaylistDetails.vue'),
+      },
+      {
+        path: 'favorite',
+        components: {
+          leftNavigation: () => import('@/pages/Home/Middle/Favorite/FavoriteNavigation.vue'),
+          default: () => import('@/pages/Home/Middle/Favorite/FavoriteMusic.vue'),
+        },
+        children: [
+          {
+            path: '',
+            name: 'FavoriteArtist',
+            component: () => import('@/pages/Home/Middle/Favorite/FavoriteArtist.vue'),
+          },
+          {
+            path: 'favorite_playlist/:id',
+            name: 'FavoritePlaylist',
+            component: () => import('@/pages/Home/Middle/Favorite/FavoriteList.vue'),
+          },
+        ],
+      },
+    ],
   },
 ]
 const router = createRouter({
@@ -41,7 +69,7 @@ const router = createRouter({
 
 //全局前置守卫，用于判断用户是否登陆
 router.beforeEach(async (to) => {
-  console.log(to.name);
+  console.log(to.name)
   const useUserMessageStore = useUserMessage()
   try {
     const res = await getLoginStatus()
@@ -49,20 +77,14 @@ router.beforeEach(async (to) => {
     if (to.name === undefined) {
       return { name: 'Login' }
     }
-    if (
-      res.data.profile === null &&
-      to.name !== 'Login'
-    ) {
-      console.log('重定向到login');
+    if (res.data.profile === null && to.name !== 'Login') {
+      console.log('重定向到login')
       // 将用户重定向到登录页面
       return { name: 'Login' }
     }
-    console.log('放行');
+    console.log('放行')
   } catch (error: any) {
-    if (
-      error.data === "" &&
-      to.name !== 'Login'
-    ) {
+    if (error.data === '' && to.name !== 'Login') {
       // 将用户重定向到登录页面
       return { name: 'Login' }
     }
