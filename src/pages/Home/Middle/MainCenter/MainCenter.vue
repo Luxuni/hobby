@@ -1,17 +1,16 @@
 <script setup lang="ts">
+import Banner from '@/components/Home/Banner/index.vue'
+import HeaderSearch from '@/components/Home/public/Search/HeaderSearch.vue'
 import '@/pages/Home/Middle/Middle.scss'
-import { useRouter, useRoute } from 'vue-router'
-import { cloudSearch, getHotSearch, getSearchDefault, logout } from '@/servies/api'
-import { onBeforeUnmount, Ref, ref, toRaw } from 'vue'
-import { Search, ArrowDownBold, Sunny, Moon } from '@element-plus/icons-vue'
-import { useDark, useToggle } from '@vueuse/core'
-import { HomeMessage, personalizedType } from '@/store/HomeMessage'
+import { getSearchDefault } from '@/servies/api'
 import { API } from '@/servies/api/API'
-import { MusicPlayer } from '@/store/MusicPlayer'
-import { storeToRefs } from 'pinia'
+import { HomeMessage, personalizedType } from '@/store/HomeMessage'
+import { ArrowDownBold, Moon, Sunny } from '@element-plus/icons-vue'
+import { useDark, useToggle } from '@vueuse/core'
 import gsap from 'gsap'
-import { AnimationMessage } from '@/store/AnimationMessage'
-import _ from 'lodash'
+import { storeToRefs } from 'pinia'
+import { onBeforeUnmount, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 type HotSearchTypes = {
   value: string
@@ -34,49 +33,13 @@ type SearchTypes = {
   }[]
 }
 
-const router = useRouter()
 const route = useRoute()
 const HomeMessageStore = HomeMessage()
 const { personalized, personalizedLoading } = storeToRefs(HomeMessageStore)
-const MusicPlayerStore = MusicPlayer()
 //切换主题相关功能
 const switchThemes = ref(route.meta.switchThemes) //切换主题开关
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
-//返回上一路由
-const goBackArror = async () => {
-  await logout()
-  router.push({ name: 'Login' })
-}
-//前进路由
-const goAheadArror = () => {
-  router.go(1)
-}
-//search input
-const state = ref('')
-// TODO存在问题，每次搜索都会触发该方法，而且搜索的内容是上一次的内容，而且抖动
-const querySearchAsync = async (queryString: string, cb: (arg: any) => void) => {
-  let result
-  //querySting不为空字符串或者不存在时，执行搜索，否则返回热搜
-  const { data: data } = queryString !== '' && queryString ? await cloudSearch({ keywords: queryString, type: 1, limit: 10, offset: 0 }) : await getHotSearch()
-  if (queryString === '' && !queryString) {
-    //如果没有输入内容，则返回热门搜索内容
-    result = (data as API.getHotSearchTypes).data.map(({ searchWord, score, iconUrl, alg }) => ({ value: searchWord, score, iconUrl, alg }))
-  } else {
-    //如果有输入内容，则返回搜索结果
-    result = (data as API.cloudSearchTypes).result.songs.map(({ name, id, ar, al }) => ({ value: name, name: name, id, ar, al }))
-  }
-  cb(result)
-}
-//点击搜索结果
-const handleSelect = (value: Ref<HotSearchTypes | SearchTypes>) => {
-  console.log('点击搜索结果', value)
-  //如果value为用户输入关键词后搜索的歌曲
-  if (value.hasOwnProperty('id')) {
-    //将id发送到piniahu
-    MusicPlayerStore.getSongDetail(toRaw(value as unknown as SearchTypes).id)
-  }
-}
 //下拉菜单的值
 const classification = ref('热门推荐')
 //点击下拉菜单
@@ -107,22 +70,10 @@ const searchEnter = (el: any, done: gsap.Callback) => {
   gsap.from(el, { duration: 2.5, y: -400, ease: 'strong.inOut', lazy: true, onComplete: done })
 }
 const bannerRef = ref(null as unknown as HTMLDivElement)
-const AnimationMessageStore = AnimationMessage()
-const { mainPageBannerLocation } = storeToRefs(AnimationMessageStore)
-const bannerLocation = () => {
-  _.debounce(() => {
-    if (bannerRef.value.getBoundingClientRect()) {
-      const { x: coverX, y: coverY } = bannerRef.value.getBoundingClientRect()
-      mainPageBannerLocation.value = { x: coverX, y: coverY }
-    } else {
-      return
-    }
-  }, 1000, { 'leading': true, 'trailing': false, })()
-}
 const searchRef = ref(null)
 const footSongList = ref(null)
 onBeforeUnmount(() => {
-  gsap.to(searchRef.value, { duration: 1, y: -400, opacity: 0, ease: 'strong.inOut', lazy: true })
+  gsap.to(searchRef.value, { duration: 0.6, y: -400, opacity: 0, ease: 'strong.inOut', lazy: true })
   gsap.to(footSongList.value, { duration: 0.6, y: 700, opacity: 0, ease: 'strong.inOut', lazy: true })
 })
 </script>
@@ -131,38 +82,24 @@ onBeforeUnmount(() => {
   <div class="h-full w-full flex flex-col justify-between">
     <!-- header -->
     <Transition name="search" @enter="searchEnter" :css="false" appear>
-      <div ref="searchRef" v-show="true" class="h-[5%] flex justify-between">
-        <!-- arror -->
-        <div class="w-[16%] h-full flex justify-between">
-          <!-- back arror -->
-          <div class="h-full aspect-square cursor-pointer" @click="goBackArror">
-            <MyImage src="../../src/assets/img/back_arror.svg" className="h-full w-full" />
-          </div>
-          <!-- go ahead arror -->
-          <div class="h-full aspect-square cursor-pointer" @click="goAheadArror">
-            <MyImage src="../../src/assets/img/go_ahead_arror.svg" className="h-full w-full" />
-          </div>
-        </div>
-        <!-- search input -->
-        <div class="h-full w-[78%]">
-          <el-autocomplete class="h-full w-full" v-model="state" :fetch-suggestions="querySearchAsync"
-            :placeholder="searchDefault" @select="handleSelect">
-            <template #prefix>
-              <el-icon>
-                <Search />
-              </el-icon>
-            </template>
-          </el-autocomplete>
-        </div>
+      <div ref="searchRef" v-show="true" class="h-[5%] w-full">
+        <HeaderSearch />
       </div>
     </Transition>
     <!-- body 轮播图 -->
-    <div ref="bannerRef" v-location="bannerLocation" class="h-[42%] w-full">
+    <div ref="bannerRef" class="h-[42%] w-full">
       <RouterView v-slot="{ Component }">
         <template v-if="Component">
           <Transition name="fade" mode="out-in" enter-active-class="animate__animated animate__fadeIn"
             leave-active-class="animate__animated animate__fadeOut">
-            <component :is="Component"></component>
+            <Suspense>
+              <template #default>
+                <component :is="Component ?? Banner"></component>
+              </template>
+              <template #fallback>
+                <h1 class="h-full w-full text-white text-4xl flex items-center justify-center">Loading...</h1>
+              </template>
+            </Suspense>
           </Transition>
         </template>
       </RouterView>
@@ -174,11 +111,11 @@ onBeforeUnmount(() => {
           <!-- tab -->
           <div class="w-full h-full flex justify-between items-center">
             <!-- download arror -->
-            <div class="h-full aspect-square cursor-pointer" @click="goBackArror">
+            <div class="h-full aspect-square cursor-pointer">
               <MyImage src="../../src/assets/img/download.svg" className="h-full w-full" />
             </div>
             <!-- menu arror -->
-            <div class="h-full aspect-square cursor-pointer" @click="goAheadArror">
+            <div class="h-full aspect-square cursor-pointer">
               <MyImage src="../../src/assets/img/menu.svg" className="h-full w-full" />
             </div>
             <!--Selector  -->

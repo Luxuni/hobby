@@ -53,7 +53,7 @@ const onLeave = (el: any, done: gsap.Callback) => {
   <div ref="FavoriteNavigationCotainer" v-resize="getFavoriteNavigationCotainerHeight"
     class="self-center h-[90%] w-full flex flex-col p-[10%] overflow-y-auto">
     <!-- my singer -->
-    <router-link class="mb-4" :to="{ name: '' }">我的歌手（{{ userDetail.artistCount }}）</router-link>
+    <router-link class="mb-4" :to="{ name: 'FavoriteArtist' }">我的歌手（{{ userDetail.artistCount }}）</router-link>
     <!-- playlist by user create -->
     <div class="cursor-pointer mb-4" @click="changeIsShowCreate">创建的歌单（{{ userDetail.createdPlaylistCount }}）</div>
     <TransitionGroup tag="ul" :css="false" @enter="onEnter" @before-enter="onBeforeEnter" @leave="onLeave" appear>

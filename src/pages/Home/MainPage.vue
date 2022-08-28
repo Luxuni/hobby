@@ -39,7 +39,14 @@ const rightEnter = (el: any, done: gsap.Callback) => {
           <template v-if="Component">
             <Transition name="fade" mode="out-in" enter-active-class="animate__animated animate__fadeIn"
               leave-active-class="animate__animated animate__fadeOut">
-              <component :is="Component"></component>
+              <Suspense>
+                <template #default>
+                  <component :is="Component"></component>
+                </template>
+                <template #fallback>
+                  <h1 class="h-full w-full text-white text-4xl flex items-center justify-center">Loading...</h1>
+                </template>
+              </Suspense>
             </Transition>
           </template>
         </RouterView>

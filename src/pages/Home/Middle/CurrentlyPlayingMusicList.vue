@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { ref, toRaw, watch } from 'vue';
-import gsap from 'gsap';
-import { CaretRight, Star, Delete } from '@element-plus/icons-vue'
-import { AnimationMessage } from '@/store/AnimationMessage';
 import { MusicPlayer } from '@/store/MusicPlayer';
-import { default as vElTableInfiniteScroll } from "el-table-infinite-scroll";
 import { PlaylistRelatedInformation } from '@/store/PlaylistRelatedInformation';
-import { storeToRefs } from 'pinia';
+import { CaretRight, Delete, Star } from '@element-plus/icons-vue';
+import { default as vElTableInfiniteScroll } from "el-table-infinite-scroll";
 import { ElMessage } from 'element-plus';
+import { storeToRefs } from 'pinia';
+import { ref, toRaw, watch } from 'vue';
 type needShowType = {
   creator: {
     userId: number;
@@ -18,14 +16,6 @@ type needShowType = {
   id: string;
 }[]
 
-//轮播图开场动画相关
-const AnimationMessageStore = AnimationMessage();
-const { mainPageBannerLocation } = storeToRefs(AnimationMessageStore);
-const currentlyPlayingMusicListBannerRef = ref(null as unknown as HTMLDivElement)
-const enterCurrentlyPlayingMusicListBanner = (el: any, done: gsap.Callback) => {
-  const { x: CBBX, y: CBBY } = currentlyPlayingMusicListBannerRef.value.getBoundingClientRect()
-  gsap.from(el, { duration: 1, x: CBBX - mainPageBannerLocation.value.x, y: mainPageBannerLocation.value.y - CBBY, ease: 'strong.inOut', opacity: 0, lazy: true, onComplete: done })
-}
 //根据当前歌单id推荐歌单相关
 const PlaylistRelatedInformationStore = PlaylistRelatedInformation();
 const { accordingCurrentPlaylistIdGetRecommendPlaylistMessages: recommendPlaylist, accordingCurrentPlaylistIdGetRecommendPlaylistMessagesLoading: recommendPlaylistLoading } = storeToRefs(PlaylistRelatedInformationStore);
@@ -136,12 +126,9 @@ watch(playlistShowNumber, (newPlaylistShowNumber) => {
 <template>
   <div ref="listContainer" class="h-full w-full flex flex-col justify-between">
     <!-- banner -->
-    <Transition name="currentlyPlayingMusicListBanner" @enter="enterCurrentlyPlayingMusicListBanner" :css="false"
-      appear>
-      <div ref="currentlyPlayingMusicListBannerRef" class="h-[30%] w-full">
-        <Banner />
-      </div>
-    </Transition>
+    <div ref="currentlyPlayingMusicListBannerRef" class="h-[30%] w-full">
+      <Banner />
+    </div>
     <!-- list -->
     <div ref="tableContainer" v-resize="getListContainerHeight" class="w-full max-h-[40%]">
       <el-table ref="table" :data="_offsetPlaylist(0, playlistShowNumber)" :height="`${tableHeight}px`"

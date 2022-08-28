@@ -570,7 +570,7 @@ export declare namespace API {
   type userPlaylistType = {
     subscribers: []
     subscribed: boolean
-    id:number
+    id: number
     creator: {
       defaultAvatar: boolean
       province: number
@@ -679,5 +679,29 @@ export declare namespace API {
     count: number
     code: number
     data: userCollectSingerType[]
+  }
+  //获取歌手分类列表返回类型
+  type artist = {
+    albumSize: number
+    alias: string[]
+    briefDesc: string
+    fansCount: number
+    followed: false
+    id: number
+    img1v1Id: number
+    img1v1Id_str: string
+    img1v1Url: string
+    musicSize: number
+    name: string
+    picId: number
+    picId_str: string
+    picUrl: string
+    topicPerson: number
+    trans: string
+  }
+  type getArtistListTypes = {
+    more: boolean
+    code: number
+    artists: artist[]
   }
 }

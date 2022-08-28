@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { NeededShowPlaylistMessage } from '@/store/NeededShowPlaylistMessage'
 import { useUserMessage } from '@/store/UserMessage'
-import { CaretRight, ChatDotRound, Delete, Download, Plus, Share, Star } from '@element-plus/icons-vue'
+import { CaretRight, Delete, Star } from '@element-plus/icons-vue'
 import { vLoading } from 'element-plus'
 import gsap from 'gsap'
 import _ from 'lodash'
-import moment from 'moment'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 
 const route = useRoute()
 //从pinia中拿取数据
 const NeededShowPlaylistMessageStore = NeededShowPlaylistMessage()
 const {
   neededShowPlaylistMessage,
-  getNeededShowPlaylistMessageLoading,
   neededShowPlaylistSongsList,
   getNeededShowPlaylistSongsListLoading,
   CommentsMessage,
@@ -36,9 +34,18 @@ const showAllBtnText = ref('')
 //介绍栏目的最外侧包裹盒子，用于页面使用flex布局方便
 const introduceBox = ref<null | HTMLDivElement>(null)
 //在所有元素的实例都加载完成后，执行一些动作
+//使得获取高度的方法只执行一次
+const getFlag = ref(true)
 const getOutMeHeight = () => {
   _.debounce(
     () => {
+      if (getFlag.value) {
+        outside.value.style.height =
+          container.value.offsetHeight * 0.13 < medial.value.offsetHeight
+            ? container.value.offsetHeight * 0.13 + 'px'
+            : medial.value.offsetHeight + 'px'
+        getFlag.value = false
+      }
       if (introduceBox.value) {
         introduceBox.value.classList.value = 'my-4'
       }
@@ -99,16 +106,14 @@ const formatterDt = (row: any, column: any, cellValue: number, index: number) =>
 const formatterAr = (row: any, column: any, cellValue: { name: string }[], index: number) => {
   return cellValue.map((item) => item.name).join('/')
 }
+const id = ref(route.params.id)
+const playListCurrentPage = ref(1)
 //分页器页码改变时触发
-const tableCurrentChange = async (currentPage: number) => {
-  await NeededShowPlaylistMessageStore.getPlaylistTrack(Number(route.params.id), 10, (currentPage - 1) * 10)
+const tableCurrentChange = async (currentPage: number, id: number) => {
+  await NeededShowPlaylistMessageStore.getPlaylistTrack(id, 10, (currentPage - 1) * 10)
 }
-//页面实例加载完成进行一些高度赋值操作
-onMounted(() => {
-  outside.value.style.height =
-    container.value.offsetHeight * 0.13 < medial.value.offsetHeight
-      ? container.value.offsetHeight * 0.13 + 'px'
-      : medial.value.offsetHeight + 'px'
+watch(playListCurrentPage, (newPage) => {
+  tableCurrentChange(newPage, Number(id.value))
 })
 //根据歌单id拿取歌单评论
 await NeededShowPlaylistMessageStore.getPlaylistComment(Number(route.params.id), 20, 0)
@@ -116,77 +121,42 @@ const useUserMessageStore = useUserMessage()
 const { userMessage } = storeToRefs(useUserMessageStore)
 //用户输入的评论
 const commentContent = ref('')
+const commentCurentPage = ref(1)
+
 //所有评论分页改变时触发
-const allCommentCurrentChange = async (currentPage: number) => {
-  await NeededShowPlaylistMessageStore.getPlaylistComment(Number(route.params.id), 20, (currentPage - 1) * 20)
+const allCommentCurrentChange = async (currentPage: number, id: number) => {
+  await NeededShowPlaylistMessageStore.getPlaylistComment(id, 20, (currentPage - 1) * 20)
 }
+watch(commentCurentPage, (newPage) => {
+  allCommentCurrentChange(newPage, Number(id.value))
+})
+watch(() => route.params, async (newParams) => {
+  if (newParams.id) {
+    console.log(newParams)
+    id.value = newParams.id
+    await NeededShowPlaylistMessageStore.getNeededShowPlaylistMessage(Number(newParams.id))
+    if (playListCurrentPage.value === 1) {
+      tableCurrentChange(1, Number(newParams.id))
+    } else {
+      playListCurrentPage.value = 1
+    }
+    if (commentCurentPage.value === 1) {
+      allCommentCurrentChange(1, Number(newParams.id))
+    } else {
+      commentCurentPage.value = 1
+    }
+  }
+})
 </script>
 
 <template>
   <div ref="container" class="w-full h-full flex flex-col justify-between overflow-y-scroll">
     <!-- header -->
-    <div class="w-full h-[23%] flex justify-between items-center">
-      <!-- left image -->
-      <div class="h-full aspect-square overflow-hidden rounded-3xl border-2 border-solid border-white">
-        <MyImage :src="neededShowPlaylistMessage.coverImgUrl"
-          className="h-full w-full rounded-3xl hover:scale-150 transition-all duration-500" />
-      </div>
-      <!-- right message -->
-      <div class="h-full w-[62%] flex flex-col justify-between">
-        <!-- title -->
-        <h1 class="text-3xl">{{ neededShowPlaylistMessage.name }}</h1>
-        <!-- creator and when was it created  -->
-        <div class="h-1/5 w-4/5 flex items-center justify-between">
-          <!-- creator and head -->
-          <div class="h-full cursor-pointer flex items-center">
-            <div class="h-full aspect-square rounded-xl overflow-hidden mr-4">
-              <MyImage :src="neededShowPlaylistMessage.creator.avatarUrl" className="h-full w-full rounded-xl" />
-            </div>
-            <div>{{ neededShowPlaylistMessage.creator.nickname }}</div>
-          </div>
-          <!-- when was it created -->
-          <div>{{ moment(neededShowPlaylistMessage.createTime).format('YYYY-M-D') }} 创建</div>
-        </div>
-        <!-- operate -->
-        <div class="w-full h-[13%]">
-          <el-button size="small">播放全部</el-button>
-          <el-button size="small">
-            <el-icon>
-              <Plus />
-            </el-icon>
-            <span>{{ neededShowPlaylistMessage.subscribedCount }}</span>
-          </el-button>
-          <el-button size="small">
-            <el-icon>
-              <Share />
-            </el-icon>
-            <span>{{ neededShowPlaylistMessage.shareCount }}</span>
-          </el-button>
-          <el-button size="small">
-            <el-icon>
-              <Download />
-            </el-icon>
-            <span>{{ neededShowPlaylistMessage.trackCount }}</span>
-          </el-button>
-          <el-button size="small">
-            <el-icon>
-              <ChatDotRound />
-            </el-icon>
-            <span>{{ neededShowPlaylistMessage.commentCount }}</span>
-          </el-button>
-        </div>
-        <!-- tags -->
-        <div class="h-[13%] w-full flex">
-          <span class="h-full w-[10%] flex items-center">标签：</span>
-          <div class="h-full w-2/5 flex items-center justify-between">
-            <el-tag v-for="tag in neededShowPlaylistMessage.tags" :key="tag" :type="'success'" size="small">{{ tag }}
-            </el-tag>
-          </div>
-        </div>
-      </div>
+    <div class="w-full h-[23%]">
+      <PlaylistHeader :neededShowPlaylistMessage="neededShowPlaylistMessage" />
     </div>
     <!-- introduce -->
-    <div ref="introduceBox" class="max-h-[13%] overflow-hidden my-4">
+    <div ref="introduceBox" class="h-[13%] overflow-hidden my-4">
       <div v-resize="getOutMeHeight" ref="outside" class="overflow-hidden">
         <p v-resize="getOutMeHeight" ref="medial" class="w-full text-sm p-4">
           <span>介绍：</span>
@@ -231,8 +201,8 @@ const allCommentCurrentChange = async (currentPage: number) => {
       </el-table>
       <!-- pagination -->
       <div class="h-[1/5] w-full">
-        <el-pagination small background layout="prev, pager, next" :total="neededShowPlaylistMessage.trackCount"
-          hide-on-single-page @current-change="tableCurrentChange" class="mt-4" />
+        <el-pagination v-model:current-page="playListCurrentPage" small background layout="prev, pager, next"
+          :total="neededShowPlaylistMessage.trackCount" hide-on-single-page class="mt-4" />
       </div>
     </div>
     <!-- Comment -->
@@ -275,8 +245,8 @@ const allCommentCurrentChange = async (currentPage: number) => {
         <div>
           <CommentItem v-for="item in CommentsMessage.comments" :item="item" :key="item.commentId" />
           <div>
-            <el-pagination small background layout="prev, pager, next" :total="CommentsMessage.total"
-              hide-on-single-page @current-change="allCommentCurrentChange" class="mt-4" />
+            <el-pagination v-model:current-page="commentCurentPage" small background layout="prev, pager, next"
+              :total="CommentsMessage.total" hide-on-single-page class="mt-4" />
           </div>
         </div>
       </div>

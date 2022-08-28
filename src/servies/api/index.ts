@@ -190,6 +190,14 @@ export const getUserCollectArtists = (): AxiosPromise<API.getUserCollectArtistsT
   })
 }
 
+//获取歌手分类列表
+export const getArtistList = (): AxiosPromise<API.getArtistListTypes> => {
+  return request({
+    url: 'api/artist/list',
+    method: 'get',
+  })
+}
+
 //退出登陆
 export const logout = () => {
   return request({

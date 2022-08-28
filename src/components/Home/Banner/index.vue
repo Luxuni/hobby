@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import '@/components/Home/Banner/Banner.scss'
-import {ref} from 'vue'
-import {HomeMessage} from '@/store/HomeMessage'
+import '@/components/Home/Banner/Banner.scss';
+import { HomeMessage } from '@/store/HomeMessage';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
 const HomeMessageStore = HomeMessage()
-const {bannerLoading,banner} = storeToRefs(HomeMessageStore)
+const { bannerLoading, banner } = storeToRefs(HomeMessageStore)
 await HomeMessageStore.getBanner()
 const bannerContainer = ref<HTMLDivElement>(undefined as unknown as HTMLDivElement)
 const bannerHeight = ref(0)
@@ -37,4 +37,5 @@ const changeBanner = () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

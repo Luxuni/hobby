@@ -7,10 +7,6 @@ export const AnimationMessage = defineStore('AnimationMessage', {
         x: 0,
         y: 0,
       },
-      mainPageBannerLocation:{
-        x: 0,
-        y: 0,
-      }
     }
   },
   getters: {

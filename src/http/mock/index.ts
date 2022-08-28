@@ -2,7 +2,7 @@ const homeNavigation = {
   findMusic: [
     { content: '首页', key: 'home', path: 'Banner' },
     { content: '专辑', key: 'album', path: '' }, //album
-    { content: '歌手', key: 'singer', path: '' }, //singer
+    { content: '歌手', key: 'singer', path: 'Singer' }, //singer
     { content: '播客', key: 'radio', path: '' }, //radio
   ],
   myMusic: [

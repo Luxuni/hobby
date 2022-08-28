@@ -55,9 +55,14 @@ const routes = [
           {
             path: 'favorite_playlist/:id',
             name: 'FavoritePlaylist',
-            component: () => import('@/pages/Home/Middle/Favorite/FavoriteList.vue'),
+            component: () => import('@/pages/Home/Middle/PlaylistDetails.vue'),
           },
         ],
+      },
+      {
+        path: 'singer',
+        name: 'Singer',
+        component: () => import('@/pages/Home/Middle/SingerPage.vue'),
       },
     ],
   },
