@@ -64,6 +64,11 @@ const routes = [
         name: 'Singer',
         component: () => import('@/pages/Home/Middle/SingerPage.vue'),
       },
+      {
+        path: 'user/:uid',
+        name: 'UserHome',
+        component: () => import('@/pages/Home/Middle/UserMessagePage.vue'),
+      },
     ],
   },
 ]

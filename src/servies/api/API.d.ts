@@ -1,3 +1,5 @@
+import { type } from 'os'
+
 export declare namespace API {
   //获取用户的登录状态返回值类型
   type getLoginStatusTypes = {
@@ -675,7 +677,7 @@ export declare namespace API {
     img1v1Url: string
   }
   type getUserCollectArtistsTypes = {
-    hasMore: false
+    hasMore: boolean
     count: number
     code: number
     data: userCollectSingerType[]
@@ -686,7 +688,7 @@ export declare namespace API {
     alias: string[]
     briefDesc: string
     fansCount: number
-    followed: false
+    followed: boolean
     id: number
     img1v1Id: number
     img1v1Id_str: string
@@ -703,5 +705,94 @@ export declare namespace API {
     more: boolean
     code: number
     artists: artist[]
+  }
+  //根据用户id获取用户详情返回类型
+  type getUserDetailByIdTypes = {
+    level: number
+    listenSongs: number
+    userPoint: {
+      userId: number
+      balance: number
+      updateTime: number
+      version: number
+      status: number
+      blockBalance: number
+    }
+    mobileSign: boolean
+    pcSign: boolean
+    profile: {
+      privacyItemUnlimit: {
+        area: boolean
+        college: boolean
+        age: boolean
+        villageAge: boolean
+      }
+      avatarDetail: null
+      vipType: number
+      userType: number
+      createTime: number
+      nickname: string
+      mutual: boolean
+      followed: boolean
+      remarkName: null
+      authStatus: number
+      detailDescription: ''
+      birthday: number
+      avatarUrl: string
+      experts: {}
+      expertTags: null
+      djStatus: number
+      accountStatus: number
+      gender: number
+      province: number
+      city: number
+      defaultAvatar: boolean
+      avatarImgId: number
+      backgroundImgId: number
+      backgroundUrl: string
+      backgroundImgIdStr: string
+      avatarImgIdStr: string
+      description: string
+      userId: number
+      signature: string
+      authority: number
+      followeds: number
+      follows: number
+      blacklist: boolean
+      eventCount: number
+      allSubscribedCount: number
+      playlistBeSubscribedCount: number
+      avatarImgId_str: string
+      followTime: null
+      followMe: boolean
+      artistIdentity: []
+      cCount: number
+      inBlacklist: boolean
+      sDJPCount: number
+      playlistCount: number
+      sCount: number
+      newFollows: number
+    }
+    peopleCanSeeMyPlayRecord: boolean
+    bindings: {
+      expiresIn: number
+      refreshTime: number
+      bindingTime: number
+      tokenJsonStr: null
+      expired: boolean
+      url: ''
+      userId: number
+      id: number
+      type: number
+    }[]
+    adValid: boolean
+    code: number
+    createTime: number
+    createDays: number
+    profileVillageInfo: {
+      title: string
+      imageUrl: string
+      targetUrl: string
+    }
   }
 }

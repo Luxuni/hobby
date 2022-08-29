@@ -204,6 +204,15 @@ export const getArtistList = (params: {
   })
 }
 
+//根据用户id获取用户详情
+export const getUserDetailById = (params: { uid: number }): AxiosPromise<API.getUserDetailByIdTypes> => {
+  return request({
+    url: 'api/user/detail',
+    method: 'get',
+    params: params,
+  })
+}
+
 //退出登陆
 export const logout = () => {
   return request({
