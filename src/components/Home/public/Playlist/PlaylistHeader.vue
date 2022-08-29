@@ -19,18 +19,21 @@ defineProps<{ neededShowPlaylistMessage: API.playListTypes }>()
     <!-- right message -->
     <div class="h-full w-[62%] flex flex-col justify-between">
       <!-- title -->
-      <h1 class="text-3xl">{{ neededShowPlaylistMessage.name }}</h1>
+      <h1 class="text-3xl">{{  neededShowPlaylistMessage.name  }}</h1>
       <!-- creator and when was it created  -->
       <div class="h-1/5 w-4/5 flex items-center justify-between">
         <!-- creator and head -->
-        <div class="h-full cursor-pointer flex items-center">
-          <div class="h-full aspect-square rounded-xl overflow-hidden mr-4">
-            <MyImage :src="neededShowPlaylistMessage.creator.avatarUrl" className="h-full w-full rounded-xl" />
-          </div>
-          <div>{{ neededShowPlaylistMessage.creator.nickname }}</div>
+        <div class="h-full">
+          <RouterLink :to="{ name: 'UserHome', params: { uid: neededShowPlaylistMessage.creator.userId } }"
+            class="h-full flex items-center">
+            <div class="h-full aspect-square rounded-xl overflow-hidden mr-4">
+              <MyImage :src="neededShowPlaylistMessage.creator.avatarUrl" className="h-full w-full rounded-xl" />
+            </div>
+            <div>{{  neededShowPlaylistMessage.creator.nickname  }}</div>
+          </RouterLink>
         </div>
         <!-- when was it created -->
-        <div>{{ moment(neededShowPlaylistMessage.createTime).format('YYYY-M-D') }} 创建</div>
+        <div>{{  moment(neededShowPlaylistMessage.createTime).format('YYYY-M-D')  }} 创建</div>
       </div>
       <!-- operate -->
       <div class="w-full h-[13%]">
@@ -39,32 +42,32 @@ defineProps<{ neededShowPlaylistMessage: API.playListTypes }>()
           <el-icon>
             <Plus />
           </el-icon>
-          <span>{{ neededShowPlaylistMessage.subscribedCount }}</span>
+          <span>{{  neededShowPlaylistMessage.subscribedCount  }}</span>
         </el-button>
         <el-button size="small">
           <el-icon>
             <Share />
           </el-icon>
-          <span>{{ neededShowPlaylistMessage.shareCount }}</span>
+          <span>{{  neededShowPlaylistMessage.shareCount  }}</span>
         </el-button>
         <el-button size="small">
           <el-icon>
             <Download />
           </el-icon>
-          <span>{{ neededShowPlaylistMessage.trackCount }}</span>
+          <span>{{  neededShowPlaylistMessage.trackCount  }}</span>
         </el-button>
         <el-button size="small">
           <el-icon>
             <ChatDotRound />
           </el-icon>
-          <span>{{ neededShowPlaylistMessage.commentCount }}</span>
+          <span>{{  neededShowPlaylistMessage.commentCount  }}</span>
         </el-button>
       </div>
       <!-- tags -->
       <div class="h-[13%] w-full flex">
         <span class="h-full w-[10%] flex items-center">标签：</span>
         <div class="h-full w-2/5 flex items-center justify-between">
-          <el-tag v-for="tag in neededShowPlaylistMessage.tags" :key="tag" :type="'success'" size="small">{{ tag }}
+          <el-tag v-for="tag in neededShowPlaylistMessage.tags" :key="tag" :type="'success'" size="small">{{  tag  }}
           </el-tag>
         </div>
       </div>
