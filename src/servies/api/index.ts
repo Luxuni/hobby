@@ -191,10 +191,16 @@ export const getUserCollectArtists = (): AxiosPromise<API.getUserCollectArtistsT
 }
 
 //获取歌手分类列表
-export const getArtistList = (): AxiosPromise<API.getArtistListTypes> => {
+export const getArtistList = (params: {
+  limit?: number
+  offset?: number
+  type?: number
+  area?: number
+}): AxiosPromise<API.getArtistListTypes> => {
   return request({
     url: 'api/artist/list',
     method: 'get',
+    params: params,
   })
 }
 

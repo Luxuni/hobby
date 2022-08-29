@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Banner from '@/components/Home/Banner/index.vue'
 import HeaderSearch from '@/components/Home/public/Search/HeaderSearch.vue'
+import ListSelector from '@/components/Home/public/Selector/ListSelector.vue'
 import '@/pages/Home/Middle/Middle.scss'
 import { getSearchDefault } from '@/servies/api'
 import { API } from '@/servies/api/API'
 import { HomeMessage, personalizedType } from '@/store/HomeMessage'
-import { ArrowDownBold, Moon, Sunny } from '@element-plus/icons-vue'
+import { Moon, Sunny } from '@element-plus/icons-vue'
 import { useDark, useToggle } from '@vueuse/core'
 import gsap from 'gsap'
 import { storeToRefs } from 'pinia'
@@ -42,6 +43,13 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 //下拉菜单的值
 const classification = ref('热门推荐')
+const commandArr = [
+  { id: 'popular', name: '热门推荐' },
+  { id: 'chinese', name: '华语' },
+  { id: 'popularity', name: '流行' },
+  { id: 'rock', name: '摇滚' },
+  { id: 'electronic', name: '电子' }
+]
 //点击下拉菜单
 const handleDropdown = async (value: { id: string; name: string }) => {
   classification.value = value.name
@@ -119,24 +127,7 @@ onBeforeUnmount(() => {
               <MyImage src="../../src/assets/img/menu.svg" className="h-full w-full" />
             </div>
             <!--Selector  -->
-            <el-dropdown @command="handleDropdown" popper-class="w-[10%]" class="h-full w-[38%]">
-              <div ref="dropdown"
-                class="h-full w-full rounded-full bg-[#313745] flex items-center justify-center text-white">
-                <span class="mr-5">{{ classification }}</span>
-                <el-icon>
-                  <ArrowDownBold />
-                </el-icon>
-              </div>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item :command="{ id: 'popular', name: '热门推荐' }">热门推荐</el-dropdown-item>
-                  <el-dropdown-item :command="{ id: 'chinese', name: '华语' }">华语</el-dropdown-item>
-                  <el-dropdown-item :command="{ id: 'popularity', name: '流行' }">流行</el-dropdown-item>
-                  <el-dropdown-item :command="{ id: 'rock', name: '摇滚' }">摇滚</el-dropdown-item>
-                  <el-dropdown-item :command="{ id: 'electronic', name: '电子' }">电子</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
+            <ListSelector :classification="classification" :handleDropdown="handleDropdown" :commandArr="commandArr" />
             <!-- theme -->
             <el-switch v-model="switchThemes" @change="toggleDark()" inline-prompt :active-icon="Sunny"
               :inactive-icon="Moon" size="large"

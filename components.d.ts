@@ -31,6 +31,7 @@ declare module '@vue/runtime-core' {
     ElTag: typeof import('element-plus/es')['ElTag']
     HeaderSearch: typeof import('./src/components/Home/public/Search/HeaderSearch.vue')['default']
     LeftNavigation: typeof import('./src/components/Home/LeftNavigation/index.vue')['default']
+    ListSelector: typeof import('./src/components/Home/public/Selector/ListSelector.vue')['default']
     MyImage: typeof import('./src/components/Home/public/MyImage/index.vue')['default']
     NavigationLink: typeof import('./src/components/Home/NavigationLink.vue')['default']
     Player: typeof import('./src/components/Home/Player/index.vue')['default']
@@ -39,5 +40,6 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ShowItem: typeof import('./src/components/Home/public/ShowItem/index.vue')['default']
+    ShowSingerItem: typeof import('./src/components/Home/public/Singer/ShowSingerItem.vue')['default']
   }
 }
